@@ -13,23 +13,26 @@
             box-sizing: border-box;
             font-family: 'Montserrat', sans-serif;
         }
+    
         html, body {
             height: 100%;
-            position: relative;
-        }
-        body {
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 50px 20px;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
             background-color: #050c2a;
-            overflow: hidden;
+            color: white;
+        }
+    
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #050c2a;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
             z-index: 1;
         }
-
-        /* Particles.js container */
+    
         #particles-js {
             position: absolute;
             top: 0;
@@ -38,41 +41,49 @@
             height: 100%;
             z-index: 0;
         }
-
+    
         body::before {
             content: "";
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-image: url('https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             opacity: 0.2;
             z-index: -1;
         }
-
+    
         h1 {
             font-size: 2.5rem;
             z-index: 2;
         }
+    
         h1 span {
             color: #5fa2ff;
         }
+    
         h3 {
-            margin-bottom: 50px;
-        }
-        .cards {
-            display: flex;
-            gap: 80px;
-            flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
             z-index: 2;
         }
+    
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            z-index: 2;
+        }
+    
         .card {
             background-color: rgba(0, 8, 66, 0.3);
-            padding: 40px;
+            padding: 30px;
             border-radius: 10px;
             width: 300px;
             text-align: center;
@@ -91,53 +102,118 @@
         .card:focus {
             outline: 2px solid #5fa2ff;
         }
-
+    
         .icon-container {
             background: radial-gradient(circle, #ffffff 0%, #ffffff 100%);
             border-radius: 50%;
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+    
         .icon-container img {
-            width: 50px;
-            
+            width: 45px;
         }
+    
         .card h2 {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
         }
+    
         .card p {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #d3d3d3;
         }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            text-align: center;
+            z-index: 2;
+        }
+        
+    
+        /* Responsive: Mobile-first */
+        @media (max-width: 768px) {
+            body {
+                padding: 30px 10px;
+            }
+    
+            h1 {
+                font-size: 2rem;
+            }
+    
+            .cards {
+                flex-direction: column;
+                gap: 20px;
+            }
+    
+            .card {
+                width: 90%;
+            }
+    
+            .icon-container {
+                width: 80px;
+                height: 80px;
+            }
+    
+            .icon-container img {
+                width: 40px;
+            }
+    
+            .card h2 {
+                font-size: 1rem;
+            }
+    
+            .card p {
+                font-size: 0.8rem;
+            }
+        }
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
     </style>
 </head>
 <body>
-    <h1><span>AI</span> MOOD BOOSTER</h1>
-    <h3>WITH MUSIC PLAYER</h3>
-    <div class="cards">
-        <button class="card" onclick="window.open('/moodDetection', '_blank')">
-            <div class="icon-container">
-                <img src="{{ url_for('static', filename='img/gambar_mood_detection.png') }}" alt="icon" />
+    <body>
+        <div id="particles-js"></div>
+    
+        <div class="main-container">
+            <h1><span>AI</span> MOOD BOOSTER</h1>
+            <h3>WITH MUSIC PLAYER</h3>
+    
+            <div class="cards">
+                <button class="card" onclick="window.open('/moodDetection', '_blank')">
+                    <div class="icon-container">
+                        <img src="{{ url_for('static', filename='img/gambar_mood_detection.png') }}" alt="icon" />
+                    </div>
+                    <h2>Mood Detection</h2>
+                    <p>Detects your facial expressions in real-time to play music that matches your current mood. Your detected mood is displayed with interactive text and emoticons for a more engaging experience.</p>
+                </button>
+                <button class="card" onclick="window.open('/chatbot', '_blank')">
+                    <div class="icon-container">
+                        <img src="{{ url_for('static', filename='img/gambar_chatbot.png') }}" alt="icon" />
+                    </div>
+                    <h2>Chatbot AI</h2>
+                    <p>Chat with an intelligent AI chatbot to explore music-related topics, get song recommendations, or receive mood-boosting tips—perfect for managing stress and academic fatigue.</p>
+                </button>
             </div>
-            <h2>Mood Detection</h2>
-            <p>Detects your facial expressions in real-time to play music that matches your current mood. Your detected mood is displayed with interactive text and emoticons for a more engaging experience.</p>
-        </button>
-        <button class="card" onclick="window.open('/chatbot', '_blank')">
-            <div class="icon-container">
-                <img src="{{ url_for('static', filename='img/gambar_chatbot.png') }}" alt="icon" />
-            </div>
-            <h2>Chatbot AI</h2>
-            <p>Chat with an intelligent AI chatbot to explore music-related topics, get song recommendations, or receive mood-boosting tips—perfect for managing stress and academic fatigue.</p>
-        </button>
-    </div>
-
-    <!-- Particles.js -->
-    <div id="particles-js"></div>
+        </div>
+    </body>
+    
 
     <script>
         particlesJS('particles-js', {
