@@ -6,6 +6,18 @@ import urllib.parse
 import os
 import uuid
 from werkzeug.utils import secure_filename
+import cloudinary
+import cloudinary.uploader
+from io import BytesIO
+import cv2
+import numpy as np
+from deepface import DeepFace
+
+cloudinary.config(
+    cloud_name="dq8cyaj2r",
+    api_key="217949594432135",
+    api_secret="IradjuZoomcgE-POMH2XbLHjdzc"
+)
 
 app = Flask(__name__)
 app.secret_key = "rahasia"
@@ -43,21 +55,32 @@ def mood_detection_page():
 def detect_mood():
     try:
         image = request.files['image']
-        filename = f"capture_{uuid.uuid4().hex}.jpg"
-        filepath = os.path.join(UPLOAD_FOLDER, secure_filename(filename))
-        image.save(filepath)
 
-        result = subprocess.run(["python", "detector.py", filepath],
-                                capture_output=True, text=True, encoding="utf-8")
-        mood = result.stdout.strip()
+        # ✅ Upload gambar ke Cloudinary
+        upload_result = cloudinary.uploader.upload(image)
+        image_url = upload_result.get("secure_url")
 
-        if "bukan wajah" in mood.lower() or "gagal" in mood.lower():
-            return jsonify({"mood": mood})
+        # ✅ Proses deteksi emosi dari gambar (tanpa simpan ke disk)
+        in_memory_file = BytesIO()
+        image.save(in_memory_file)
+        in_memory_file.seek(0)
 
+        file_bytes = np.frombuffer(in_memory_file.read(), dtype=np.uint8)
+        img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+
+        if img is None:
+            return jsonify({"mood": "Gagal membaca gambar."})
+
+        result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=True)
+        emotion = result[0]['dominant_emotion']
+
+        # ✅ Kirim hasil ke /result dengan parameter mood dan img (URL Cloudinary)
         return jsonify({
-            "redirect": url_for("result_page", mood=mood, img=os.path.basename(filepath))
+            "redirect": url_for("result_page", mood=emotion, img=image_url)
         })
-    except Exception:
+
+    except Exception as e:
+        print("[ERROR DETECT_MOOD]", e)
         return jsonify({"mood": "Gagal mendeteksi mood."})
 
 @app.route("/result", methods=["GET"])

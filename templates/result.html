@@ -193,7 +193,10 @@
                 <h1 style="font-size: 2.5rem;">MOOD DETECTION</h1>
                 <h2 style="font-size: 1.4rem;">RECOMMENDATION SONGS</h2>
               </div>
-          <img src="{{ url_for('static', filename='uploads/' + img) }}" alt="Foto Wajah">
+              {% if img %}
+                <img src="{{ img }}" alt="Foto Wajah"
+                    style="max-width: 500px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+              {% endif %}
           <div class="mood-label">✨Kamu Terlihat {{ mood.capitalize() }} {{ emot }}</div>
         </div>
   
